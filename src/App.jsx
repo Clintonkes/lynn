@@ -6,7 +6,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import ScrollToTop from './components/ScrollToTop';
 import AdminLogin from '@/pages/AdminLogin';
 import AdminDashboard from '@/pages/AdminDashboard';
-import JaSparkle from '@/pages/JaSparkle';
+import Lynnhomes from '@/pages/Lynnhomes';
 
 const AdminRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -27,7 +27,7 @@ function App() {
         <Router>
           <ScrollToTop />
           <Routes>
-            <Route path="/" element={<JaSparkle />} />
+            <Route path="/" element={<Lynnhomes />} />
             <Route path="/ja-sparkle" element={<Navigate to="/" replace />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route
