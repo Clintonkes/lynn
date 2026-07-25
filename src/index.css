@@ -103,16 +103,6 @@
 }
 
 @layer utilities {
-  .text-blade { color: #1A3C34; }
-  .bg-blade { background-color: #1A3C34; }
-  .text-linen { color: #F9F8F4; }
-  .bg-linen { background-color: #F9F8F4; }
-  .text-gold { color: #C5A059; }
-  .bg-gold { background-color: #C5A059; }
-  .text-obsidian { color: #121212; }
-  .bg-obsidian { background-color: #121212; }
-  .border-blade { border-color: #1A3C34; }
-  .border-gold { border-color: #C5A059; }
   .font-mono-coord { font-family: 'JetBrains Mono', ui-monospace, monospace; }
   .blade-divider {
     background: linear-gradient(135deg, transparent 48%, #C5A059 48%, #C5A059 52%, transparent 52%);

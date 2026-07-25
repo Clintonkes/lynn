@@ -1,5 +1,6 @@
 import React from "react";
 import { Truck, Phone, Mail, MapPin } from "lucide-react";
+import { scrollToSection } from "@/lib/scrollToSection";
 
 export default function Footer() {
   return (
@@ -45,12 +46,12 @@ export default function Footer() {
             <p className="text-lynn-amber text-xs font-bold uppercase tracking-[0.2em] mb-3">
               Ready to ship?
             </p>
-            <a
-              href="#lh-quote"
+            <button
+              onClick={() => scrollToSection("lh-quote")}
               className="inline-flex items-center px-6 py-3 rounded bg-lynn-amber text-lynn-asphalt font-bold text-sm uppercase tracking-wide hover:brightness-110 transition"
             >
               Get a Quote
-            </a>
+            </button>
           </div>
         </div>
         <div className="mt-14 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between gap-3 text-xs uppercase tracking-wide text-white/40">

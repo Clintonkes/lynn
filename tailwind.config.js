@@ -48,6 +48,10 @@ module.exports = {
   				steel: '#161B22',
   				amber: '#F5A623'
   			},
+  			blade: '#1A3C34',
+  			linen: '#F9F8F4',
+  			gold: '#C5A059',
+  			obsidian: '#121212',
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',

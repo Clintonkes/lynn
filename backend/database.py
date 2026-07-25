@@ -30,16 +30,23 @@ class Booking(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     reference = Column(String, unique=True, index=True)
-    address = Column(String, nullable=False)
-    frequency = Column(String, nullable=False)
     name = Column(String, nullable=False)
     email = Column(String, nullable=False)
     phone = Column(String, nullable=True)
-    preferred_date = Column(Date, nullable=True)
-    preferred_time = Column(String, nullable=True)
+    company = Column(String, nullable=True)
+    load_type = Column(String, nullable=True)
+    pickup = Column(String, nullable=True)
+    delivery = Column(String, nullable=True)
+    notes = Column(Text, nullable=True)
     status = Column(String, default=BookingStatus.pending.value)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    # Legacy lawn-care fields, kept nullable for rows created before the
+    # freight pivot. No longer read from or written to by the app.
+    address = Column(String, nullable=True)
+    frequency = Column(String, nullable=True)
+    preferred_date = Column(Date, nullable=True)
+    preferred_time = Column(String, nullable=True)
 
 
 class Contact(Base):
@@ -77,6 +84,23 @@ def _ensure_columns():
             conn.execute(text("ALTER TABLE bookings ADD COLUMN preferred_date DATE"))
         if "preferred_time" not in existing:
             conn.execute(text("ALTER TABLE bookings ADD COLUMN preferred_time VARCHAR"))
+        if "company" not in existing:
+            conn.execute(text("ALTER TABLE bookings ADD COLUMN company VARCHAR"))
+        if "load_type" not in existing:
+            conn.execute(text("ALTER TABLE bookings ADD COLUMN load_type VARCHAR"))
+        if "pickup" not in existing:
+            conn.execute(text("ALTER TABLE bookings ADD COLUMN pickup VARCHAR"))
+        if "delivery" not in existing:
+            conn.execute(text("ALTER TABLE bookings ADD COLUMN delivery VARCHAR"))
+        if "notes" not in existing:
+            conn.execute(text("ALTER TABLE bookings ADD COLUMN notes TEXT"))
+        # address/frequency were NOT NULL under the old lawn-care schema;
+        # freight quotes don't use them, so relax the constraint. SQLite
+        # can't alter column nullability in place, but local dev never
+        # has rows depending on this, so it's safe to skip there.
+        if engine.dialect.name != "sqlite":
+            conn.execute(text("ALTER TABLE bookings ALTER COLUMN address DROP NOT NULL"))
+            conn.execute(text("ALTER TABLE bookings ALTER COLUMN frequency DROP NOT NULL"))
 
 
 def init_db():

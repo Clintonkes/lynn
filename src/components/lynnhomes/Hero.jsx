@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
+import { scrollToSection } from "@/lib/scrollToSection";
 
 const SLIDES = [
   "https://media.base44.com/images/public/6a5d5a3dd2e5eb4ee0df1b96/a99fa42f8_generated_image.png",
@@ -75,18 +76,18 @@ export default function Hero() {
           transition={{ duration: 0.7, delay: 0.4 }}
           className="flex flex-wrap gap-4 mt-9"
         >
-          <a
-            href="#lh-quote"
+          <button
+            onClick={() => scrollToSection("lh-quote")}
             className="inline-flex items-center gap-2 px-7 py-4 rounded bg-lynn-amber text-lynn-asphalt font-bold uppercase tracking-wide hover:brightness-110 transition"
           >
             <ArrowRight size={18} /> Request a Quote
-          </a>
-          <a
-            href="#lh-fleet"
+          </button>
+          <button
+            onClick={() => scrollToSection("lh-fleet")}
             className="inline-flex items-center gap-2 px-7 py-4 rounded border border-white/30 text-white font-bold uppercase tracking-wide hover:bg-white hover:text-lynn-asphalt transition"
           >
             <Play size={18} /> View the Fleet
-          </a>
+          </button>
         </motion.div>
         <motion.div
           initial={{ opacity: 0 }}

@@ -27,23 +27,8 @@ const STATUS_OPTIONS = [
   { value: "completed", label: "Completed", color: "bg-blue-100 text-blue-800" },
 ];
 
-const FREQUENCY_LABELS = {
-  weekly: "Weekly",
-  biweekly: "Bi-weekly",
-  seasonal: "Seasonal",
-};
-
-const TIME_WINDOW_LABELS = {
-  morning: "Morning (8am–12pm)",
-  afternoon: "Afternoon (12pm–4pm)",
-  evening: "Evening (4pm–7pm)",
-};
-
-const formatDate = (iso) =>
-  new Date(iso).toLocaleDateString(undefined, { dateStyle: "medium" });
-
 const TAB_LABELS = {
-  bookings: "Service Requests",
+  bookings: "Quote Requests",
   contacts: "Messages",
 };
 
@@ -339,7 +324,7 @@ function BookingsTable({ bookings, onUpdateStatus, onView }) {
   const { page, setPage, totalPages, paged } = usePagedData(bookings);
 
   if (bookings.length === 0) {
-    return <p className="text-linen/40 text-center py-10">No service requests yet.</p>;
+    return <p className="text-linen/40 text-center py-10">No quote requests yet.</p>;
   }
 
   const handleUpdateStatus = (id, value) => {
@@ -357,8 +342,8 @@ function BookingsTable({ bookings, onUpdateStatus, onView }) {
               <th className="font-mono-coord text-linen/40 text-[10px] tracking-[0.2em] py-3 px-4">REF</th>
               <th className="font-mono-coord text-linen/40 text-[10px] tracking-[0.2em] py-3 px-4">NAME</th>
               <th className="font-mono-coord text-linen/40 text-[10px] tracking-[0.2em] py-3 px-4">EMAIL</th>
-              <th className="font-mono-coord text-linen/40 text-[10px] tracking-[0.2em] py-3 px-4">ADDRESS</th>
-              <th className="font-mono-coord text-linen/40 text-[10px] tracking-[0.2em] py-3 px-4">FREQUENCY</th>
+              <th className="font-mono-coord text-linen/40 text-[10px] tracking-[0.2em] py-3 px-4">LOAD TYPE</th>
+              <th className="font-mono-coord text-linen/40 text-[10px] tracking-[0.2em] py-3 px-4">PICKUP → DELIVERY</th>
               <th className="font-mono-coord text-linen/40 text-[10px] tracking-[0.2em] py-3 px-4">STATUS</th>
               <th className="font-mono-coord text-linen/40 text-[10px] tracking-[0.2em] py-3 px-4">DATE</th>
               <th className="font-mono-coord text-linen/40 text-[10px] tracking-[0.2em] py-3 px-4"></th>
@@ -370,8 +355,8 @@ function BookingsTable({ bookings, onUpdateStatus, onView }) {
                 <td className="py-4 px-4 font-mono-coord text-gold text-xs">{b.reference}</td>
                 <td className="py-4 px-4 text-linen text-sm">{b.name}</td>
                 <td className="py-4 px-4 text-linen/70 text-sm">{b.email}</td>
-                <td className="py-4 px-4 text-linen/70 text-sm max-w-[200px] truncate">{b.address}</td>
-                <td className="py-4 px-4 text-linen/70 text-sm">{FREQUENCY_LABELS[b.frequency] || b.frequency}</td>
+                <td className="py-4 px-4 text-linen/70 text-sm">{b.load_type}</td>
+                <td className="py-4 px-4 text-linen/70 text-sm max-w-[220px] truncate">{b.pickup} → {b.delivery}</td>
                 <td className="py-4 px-4 relative">
                   <StatusDropdown
                     booking={b}
@@ -415,6 +400,8 @@ function BookingsTable({ bookings, onUpdateStatus, onView }) {
               />
             </div>
             <p className="font-mono-coord text-gold text-[11px] tracking-wide">{b.reference}</p>
+            <p className="text-linen/70 text-xs mt-2">{b.load_type}</p>
+            <p className="text-linen/50 text-xs mt-0.5 truncate">{b.pickup} → {b.delivery}</p>
             <p className="text-linen/50 text-xs font-mono-coord mt-1">{formatDateTime(b.created_at)}</p>
             <button
               onClick={() => onView(b)}
@@ -526,7 +513,7 @@ function BookingDetailDialog({ booking, onOpenChange }) {
           <>
             <DialogHeader>
               <DialogTitle className="font-display font-light text-2xl">
-                Service Request
+                Quote Request
               </DialogTitle>
               <DialogDescription className="font-mono-coord text-gold text-xs tracking-wider">
                 REF · {booking.reference}
@@ -540,21 +527,15 @@ function BookingDetailDialog({ booking, onOpenChange }) {
               />
               <DetailRow label="EMAIL" value={booking.email} />
               <DetailRow label="PHONE" value={booking.phone || "—"} />
-              <div className="col-span-2">
-                <DetailRow label="PROPERTY ADDRESS" value={booking.address} />
-              </div>
-              <DetailRow
-                label="FREQUENCY"
-                value={FREQUENCY_LABELS[booking.frequency] || booking.frequency}
-              />
-              <DetailRow
-                label="PREFERRED START DATE"
-                value={booking.preferred_date ? formatDate(booking.preferred_date) : "—"}
-              />
-              <DetailRow
-                label="PREFERRED TIME"
-                value={TIME_WINDOW_LABELS[booking.preferred_time] || booking.preferred_time || "—"}
-              />
+              <DetailRow label="COMPANY" value={booking.company || "—"} />
+              <DetailRow label="LOAD TYPE" value={booking.load_type || "—"} />
+              <DetailRow label="PICKUP" value={booking.pickup || "—"} />
+              <DetailRow label="DELIVERY" value={booking.delivery || "—"} />
+              {booking.notes && (
+                <div className="col-span-2">
+                  <DetailRow label="NOTES" value={booking.notes} />
+                </div>
+              )}
               <DetailRow label="SUBMITTED" value={formatDateTime(booking.created_at)} />
               <DetailRow label="LAST UPDATED" value={formatDateTime(booking.updated_at)} />
             </div>

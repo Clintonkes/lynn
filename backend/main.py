@@ -61,7 +61,7 @@ def _seed_admin():
         # guessable default.
         return
 
-    admin_email = os.getenv("ADMIN_EMAIL", "admin@jasparkle.com")
+    admin_email = os.getenv("ADMIN_EMAIL", "admin@lynnhomes.com")
     db = SessionLocal()
     try:
         existing = db.query(Admin).first()
@@ -91,13 +91,14 @@ def create_booking(data: BookingCreate, db: Session = Depends(get_db)):
     reference = _generate_reference()
     booking = Booking(
         reference=reference,
-        address=data.address,
-        frequency=data.frequency,
         name=data.name,
         email=data.email,
         phone=data.phone,
-        preferred_date=data.preferred_date,
-        preferred_time=data.preferred_time,
+        company=data.company,
+        load_type=data.load_type,
+        pickup=data.pickup,
+        delivery=data.delivery,
+        notes=data.notes,
         status="pending",
     )
     db.add(booking)
@@ -106,30 +107,32 @@ def create_booking(data: BookingCreate, db: Session = Depends(get_db)):
 
     send_email(
         to_email=data.email,
-        subject=f"Your JA Sparkle Service Request {reference}",
+        subject=f"Your Lynnhomes Quote Request {reference}",
         html_body=booking_confirmation_html(
             name=data.name,
             reference=reference,
-            address=data.address,
-            frequency=data.frequency,
-            preferred_date=data.preferred_date,
-            preferred_time=data.preferred_time,
+            load_type=data.load_type,
+            pickup=data.pickup,
+            delivery=data.delivery,
+            company=data.company,
+            notes=data.notes,
         ),
     )
 
-    admin_email = os.getenv("ADMIN_EMAIL", "admin@jasparkle.com")
+    admin_email = os.getenv("ADMIN_EMAIL", "admin@lynnhomes.com")
     send_email(
         to_email=admin_email,
-        subject=f"New Service Request: {reference}",
+        subject=f"New Quote Request: {reference}",
         html_body=booking_admin_notification_html(
             name=data.name,
             email=data.email,
             phone=data.phone,
-            address=data.address,
-            frequency=data.frequency,
+            load_type=data.load_type,
+            pickup=data.pickup,
+            delivery=data.delivery,
             reference=reference,
-            preferred_date=data.preferred_date,
-            preferred_time=data.preferred_time,
+            company=data.company,
+            notes=data.notes,
         ),
     )
 
@@ -151,7 +154,7 @@ def create_contact(data: ContactCreate, db: Session = Depends(get_db)):
 
     send_email(
         to_email=data.email,
-        subject="Thank you for contacting JA Sparkle",
+        subject="Thank you for contacting Lynnhomes",
         html_body=contact_confirmation_html(
             name=data.name,
             subject=data.subject,
@@ -159,7 +162,7 @@ def create_contact(data: ContactCreate, db: Session = Depends(get_db)):
         ),
     )
 
-    admin_email = os.getenv("ADMIN_EMAIL", "admin@jasparkle.com")
+    admin_email = os.getenv("ADMIN_EMAIL", "admin@lynnhomes.com")
     send_email(
         to_email=admin_email,
         subject=f"New Contact: {data.subject or 'No subject'}",
@@ -219,12 +222,13 @@ def update_booking_status(
 
     send_email(
         to_email=booking.email,
-        subject=f"JA Sparkle Service Update \u2014 {booking.reference}",
+        subject=f"Lynnhomes Quote Update {booking.reference}",
         html_body=booking_status_html(
             name=booking.name,
             reference=booking.reference,
             status=data.status,
-            address=booking.address,
+            pickup=booking.pickup,
+            delivery=booking.delivery,
         ),
     )
 

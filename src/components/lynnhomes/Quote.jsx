@@ -13,20 +13,22 @@ const TYPES = [
   "Other",
 ];
 
+const EMPTY_FORM = {
+  name: "",
+  company: "",
+  phone: "",
+  email: "",
+  type: TYPES[0],
+  pickup: "",
+  delivery: "",
+  notes: "",
+};
+
 export default function Quote() {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [form, setForm] = useState({
-    name: "",
-    company: "",
-    phone: "",
-    email: "",
-    type: TYPES[0],
-    pickup: "",
-    delivery: "",
-    notes: "",
-  });
+  const [form, setForm] = useState(EMPTY_FORM);
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
   const submit = async (e) => {
@@ -34,24 +36,19 @@ export default function Quote() {
     setError("");
     setLoading(true);
 
-    const messageParts = [
-      `Load Type: ${form.type}`,
-      `Pickup: ${form.pickup}`,
-      `Delivery: ${form.delivery}`,
-    ];
-    if (form.company) messageParts.unshift(`Company: ${form.company}`);
-    if (form.notes) messageParts.push(`Notes: ${form.notes}`);
-
     try {
-      const res = await fetch(`${API_URL}/api/contacts`, {
+      const res = await fetch(`${API_URL}/api/bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: form.name,
           email: form.email,
           phone: form.phone,
-          subject: `Quote Request - ${form.type}`,
-          message: messageParts.join("\n"),
+          company: form.company || null,
+          load_type: form.type,
+          pickup: form.pickup,
+          delivery: form.delivery,
+          notes: form.notes || null,
         }),
       });
       if (!res.ok) {
@@ -64,6 +61,12 @@ export default function Quote() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const startNewQuote = () => {
+    setForm(EMPTY_FORM);
+    setError("");
+    setDone(false);
   };
 
   return (
@@ -117,6 +120,13 @@ export default function Quote() {
               <p className="text-white/55">
                 Our dispatch team will reach out within one business day.
               </p>
+              <button
+                type="button"
+                onClick={startNewQuote}
+                className="inline-flex items-center gap-2 mt-8 px-7 py-4 rounded bg-lynn-amber text-lynn-asphalt font-bold uppercase tracking-wide hover:brightness-110 transition"
+              >
+                Submit another quote
+              </button>
             </div>
           ) : (
             <>
@@ -155,6 +165,7 @@ export default function Quote() {
               </Field>
               <Field label="Email">
                 <input
+                  required
                   type="email"
                   value={form.email}
                   onChange={(e) => set("email", e.target.value)}

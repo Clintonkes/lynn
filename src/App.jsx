@@ -28,7 +28,6 @@ function App() {
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Lynnhomes />} />
-            <Route path="/ja-sparkle" element={<Navigate to="/" replace />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route
               path="/admin/dashboard"

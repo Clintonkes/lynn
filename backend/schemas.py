@@ -1,28 +1,30 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional, Literal
-from datetime import datetime, date
+from typing import Optional
+from datetime import datetime
 
 
 class BookingCreate(BaseModel):
-    address: str
-    frequency: str
     name: str
     email: EmailStr
     phone: str
-    preferred_date: date
-    preferred_time: Literal["morning", "afternoon", "evening"]
+    load_type: str
+    pickup: str
+    delivery: str
+    company: Optional[str] = None
+    notes: Optional[str] = None
 
 
 class BookingResponse(BaseModel):
     id: int
     reference: str
-    address: str
-    frequency: str
     name: str
     email: str
     phone: Optional[str]
-    preferred_date: Optional[date]
-    preferred_time: Optional[str]
+    company: Optional[str]
+    load_type: Optional[str]
+    pickup: Optional[str]
+    delivery: Optional[str]
+    notes: Optional[str]
     status: str
     created_at: datetime
     updated_at: datetime
