@@ -117,4 +117,21 @@
   .blade-divider {
     background: linear-gradient(135deg, transparent 48%, #C5A059 48%, #C5A059 52%, transparent 52%);
   }
+
+  .lyh-kenburns {
+    animation: lyh-kenburns 9s ease-in-out infinite alternate;
+  }
+
+  .lyh-input {
+    @apply w-full bg-lynn-asphalt/60 border border-white/15 rounded-lg px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-lynn-amber transition;
+  }
+}
+
+@keyframes lyh-kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
 }

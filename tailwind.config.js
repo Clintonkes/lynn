@@ -43,12 +43,10 @@ module.exports = {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
-  			jas: {
-  				paper: '#F6F8F3',
-  				ink: '#0E2A1F',
-  				moss: '#1F6B43',
-  				lime: '#C8F24E',
-  				clay: '#E8763A'
+  			lynn: {
+  				asphalt: '#0B0E11',
+  				steel: '#161B22',
+  				amber: '#F5A623'
   			},
   			chart: {
   				'1': 'hsl(var(--chart-1))',
@@ -72,7 +70,8 @@ module.exports = {
   			heading: ['var(--font-heading)'],
   			body: ['var(--font-body)'],
   			display: ['var(--font-display)'],
-  			mono: ['var(--font-mono)']
+  			mono: ['var(--font-mono)'],
+  			archivo: ['Archivo', 'ui-sans-serif', 'system-ui', 'sans-serif']
   		},
   		keyframes: {
   			'accordion-down': {
@@ -90,11 +89,20 @@ module.exports = {
   				to: {
   					height: '0'
   				}
+  			},
+  			'lynn-marquee': {
+  				from: {
+  					transform: 'translateX(0)'
+  				},
+  				to: {
+  					transform: 'translateX(-50%)'
+  				}
   			}
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'lynn-marquee': 'lynn-marquee 22s linear infinite'
   		}
   	}
   },
